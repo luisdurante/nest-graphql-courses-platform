@@ -7,3 +7,7 @@ export namespace PostgresConstants {
   export const DATABASE = process.env.POSTGRES_DATABASE;
   export const SYNCHRONIZE = true;
 }
+
+export namespace DatabaseProvidersConstants {
+  export const USERS = 'USERS_PROVIDERS';
+}

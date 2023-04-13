@@ -1,7 +1,17 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
+import { DateResolver } from 'graphql-scalars';
 
 @InputType()
 export class CreateUserInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field(() => String, { description: 'User email' })
+  email: string;
+
+  @Field(() => String, { description: 'User name' })
+  name: string;
+
+  @Field(() => String, { description: 'User description' })
+  description?: string;
+
+  @Field(() => DateResolver, { description: 'User birth date' })
+  birthDate: Date;
 }

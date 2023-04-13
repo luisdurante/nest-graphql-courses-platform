@@ -3,28 +3,79 @@
 # ------------------------------------------------------
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """User birth date"""
+  birthDate: Date!
+
+  """User description"""
+  description: String!
+
+  """User email"""
+  email: String!
+
+  """User name"""
+  name: String!
 }
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  removeUser(id: Int!): User!
+  removeUser(id: String!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
-  user(id: Int!): User!
+  user(id: String!): User!
   users: [User!]!
 }
 
 input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  """User birth date"""
+  birthDate: Date
+
+  """User description"""
+  description: String
+
+  """User email"""
+  email: String
+
+  """User ID"""
+  id: String!
+
+  """User name"""
+  name: String
 }
 
 type User {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """User birth date"""
+  birthDate: Date!
+
+  """User creation date"""
+  createdAt: DateTime!
+
+  """User deletion date"""
+  deletedAt: DateTime!
+
+  """User description"""
+  description: String!
+
+  """User email"""
+  email: String!
+
+  """User ID (uuid)"""
+  id: String!
+
+  """User name"""
+  name: String!
+
+  """User last update date"""
+  updatedAt: DateTime!
 }

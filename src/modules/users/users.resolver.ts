@@ -1,35 +1,56 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { UserDTO } from './dto/user.dto';
+import { ReturningStatementNotSupportedError } from 'typeorm';
 
-@Resolver(() => User)
+@Resolver(() => UserDTO)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput);
+  @Mutation(() => UserDTO)
+  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    try {
+      return await this.usersService.create(createUserInput);
+    } catch (err) {
+      return err;
+    }
   }
 
-  @Query(() => [User], { name: 'users' })
+  @Query(() => [UserDTO], { name: 'users' })
   findAll() {
-    return this.usersService.findAll();
+    try {
+      return this.usersService.findAll();
+    } catch (err) {
+      return err;
+    }
   }
 
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.findOne(id);
+  @Query(() => UserDTO, { name: 'user' })
+  findOne(@Args('id', { type: () => String }) id: string) {
+    try {
+      return this.usersService.findOne(id);
+    } catch (err) {
+      return err;
+    }
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserDTO)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
+    try {
+      return this.usersService.update(updateUserInput);
+    } catch (err) {
+      return err;
+    }
   }
 
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.remove(id);
+  @Mutation(() => UserDTO)
+  removeUser(@Args('id', { type: () => String }) id: string) {
+    try {
+      return this.usersService.remove(id);
+    } catch (err) {
+      return err;
+    }
   }
 }
