@@ -5,6 +5,7 @@ import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './modules/database/database.module';
 import { UsersModule } from './modules/users/users.module';
+import { DateResolver, DateTimeResolver } from 'graphql-scalars';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from './modules/users/users.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       playground: true,
+      resolvers: { Date: DateResolver, DateTime: DateTimeResolver },
     }),
     UsersModule,
   ],
