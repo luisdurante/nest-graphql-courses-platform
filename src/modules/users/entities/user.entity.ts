@@ -18,8 +18,11 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
+
+  @Column()
+  password: string;
 
   @Column({ name: 'birth_date', type: 'date' })
   birthDate: Date;

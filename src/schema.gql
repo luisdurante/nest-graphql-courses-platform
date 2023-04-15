@@ -6,14 +6,14 @@ input CreateUserInput {
   """User birth date"""
   birthDate: Date!
 
-  """User description"""
-  description: String!
-
   """User email"""
   email: String!
 
   """User name"""
   name: String!
+
+  """User password"""
+  password: String!
 }
 
 """
@@ -26,9 +26,26 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+input LoginInput {
+  """User email"""
+  email: String!
+
+  """User password"""
+  password: String!
+}
+
+type LoginResponse {
+  """User access token"""
+  access_token: String!
+
+  """User information"""
+  user: User!
+}
+
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
+  login(loginInput: LoginInput!): LoginResponse!
   removeUser(id: String!): User!
+  signup(signupInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
@@ -41,9 +58,6 @@ input UpdateUserInput {
   """User birth date"""
   birthDate: Date
 
-  """User description"""
-  description: String
-
   """User email"""
   email: String
 
@@ -52,6 +66,9 @@ input UpdateUserInput {
 
   """User name"""
   name: String
+
+  """User password"""
+  password: String
 }
 
 type User {
@@ -62,10 +79,10 @@ type User {
   createdAt: DateTime!
 
   """User deletion date"""
-  deletedAt: DateTime!
+  deletedAt: DateTime
 
   """User description"""
-  description: String!
+  description: String
 
   """User email"""
   email: String!
@@ -77,5 +94,5 @@ type User {
   name: String!
 
   """User last update date"""
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }

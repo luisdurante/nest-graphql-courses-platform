@@ -9,8 +9,8 @@ export class CreateUserInput {
   @Field(() => String, { description: 'User name' })
   name: string;
 
-  @Field(() => String, { description: 'User description' })
-  description?: string;
+  @Field(() => String, { description: 'User password' })
+  password: string;
 
   @Field(() => DateResolver, { description: 'User birth date' })
   birthDate: Date;

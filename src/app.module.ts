@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './modules/database/database.module';
 import { UsersModule } from './modules/users/users.module';
 import { DateResolver, DateTimeResolver } from 'graphql-scalars';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DateResolver, DateTimeResolver } from 'graphql-scalars';
       resolvers: { Date: DateResolver, DateTime: DateTimeResolver },
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

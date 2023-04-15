@@ -1,24 +1,16 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UserDTO } from './dto/user.dto';
-import { ReturningStatementNotSupportedError } from 'typeorm';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 
 @Resolver(() => UserDTO)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Mutation(() => UserDTO)
-  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    try {
-      return await this.usersService.create(createUserInput);
-    } catch (err) {
-      return err;
-    }
-  }
-
   @Query(() => [UserDTO], { name: 'users' })
+  @UseGuards(JwtAuthGuard)
   findAll() {
     try {
       return this.usersService.findAll();
@@ -28,6 +20,7 @@ export class UsersResolver {
   }
 
   @Query(() => UserDTO, { name: 'user' })
+  @UseGuards(JwtAuthGuard)
   findOne(@Args('id', { type: () => String }) id: string) {
     try {
       return this.usersService.findOne(id);
@@ -37,8 +30,18 @@ export class UsersResolver {
   }
 
   @Mutation(() => UserDTO)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+  @UseGuards(JwtAuthGuard)
+  updateUser(
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @Context() context: any,
+  ) {
     try {
+      const authUserId = context.req.user.id;
+
+      if (authUserId !== updateUserInput.id) {
+        throw new ForbiddenException(`Forbidden Action`);
+      }
+
       return this.usersService.update(updateUserInput);
     } catch (err) {
       return err;
@@ -46,8 +49,18 @@ export class UsersResolver {
   }
 
   @Mutation(() => UserDTO)
-  removeUser(@Args('id', { type: () => String }) id: string) {
+  @UseGuards(JwtAuthGuard)
+  removeUser(
+    @Args('id', { type: () => String }) id: string,
+    @Context() context: any,
+  ) {
     try {
+      const authUserId = context.req.user.id;
+
+      if (authUserId !== id) {
+        throw new ForbiddenException(`Forbidden Action`);
+      }
+
       return this.usersService.remove(id);
     } catch (err) {
       return err;

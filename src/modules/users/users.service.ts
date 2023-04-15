@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
@@ -27,15 +27,27 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const course = await this.usersRepository.findOne({
+    const user = await this.usersRepository.findOne({
       where: {
         id,
       },
     });
 
-    if (!course) throw new GraphQLError(`User id doesn't exist`);
+    if (!user) return null;
 
-    return course;
+    return user;
+  }
+
+  async findOneByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) return null;
+
+    return user;
   }
 
   async update(updateUserInput: UpdateUserInput) {

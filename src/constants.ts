@@ -11,3 +11,8 @@ export namespace PostgresConstants {
 export namespace DatabaseProvidersConstants {
   export const USERS = 'USERS_PROVIDERS';
 }
+
+export namespace JwtConstants {
+  export const SECRET = process.env.JWT_SECRET;
+  export const TTL = process.env.JWT_TTL;
+}

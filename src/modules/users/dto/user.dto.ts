@@ -12,8 +12,8 @@ export class UserDTO {
   @Field(() => String, { description: 'User name' })
   name: string;
 
-  @Field(() => String, { description: 'User description' })
-  description: string;
+  @Field(() => String, { description: 'User description', nullable: true })
+  description?: string;
 
   @Field(() => DateResolver, { description: 'User birth date' })
   birthDate: Date;
@@ -21,9 +21,15 @@ export class UserDTO {
   @Field(() => DateTimeResolver, { description: 'User creation date' })
   createdAt: Date;
 
-  @Field(() => DateTimeResolver, { description: 'User last update date' })
+  @Field(() => DateTimeResolver, {
+    description: 'User last update date',
+    nullable: true,
+  })
   updatedAt: Date;
 
-  @Field(() => DateTimeResolver, { description: 'User deletion date' })
+  @Field(() => DateTimeResolver, {
+    description: 'User deletion date',
+    nullable: true,
+  })
   deletedAt: Date;
 }
