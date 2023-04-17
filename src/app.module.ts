@@ -3,15 +3,25 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './modules/database/database.module';
 import { UsersModule } from './modules/users/users.module';
 import { DateResolver, DateTimeResolver } from 'graphql-scalars';
 import { AuthModule } from './modules/auth/auth.module';
+import { PostgresConstants } from './constants';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    DatabaseModule,
+    TypeOrmModule.forRoot({
+      type: PostgresConstants.TYPE,
+      host: PostgresConstants.HOST,
+      port: PostgresConstants.PORT,
+      username: PostgresConstants.USERNAME,
+      password: PostgresConstants.PASSWORD,
+      database: PostgresConstants.DATABASE,
+      entities: PostgresConstants.ENTITIES,
+      synchronize: PostgresConstants.SYNCHRONIZE,
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),

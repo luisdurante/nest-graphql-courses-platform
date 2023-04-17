@@ -5,11 +5,8 @@ export namespace PostgresConstants {
   export const USERNAME = process.env.POSTGRES_USER;
   export const PASSWORD = process.env.POSTGRES_PASS;
   export const DATABASE = process.env.POSTGRES_DATABASE;
+  export const ENTITIES = [__dirname + '/../**/*.entity.js'];
   export const SYNCHRONIZE = true;
-}
-
-export namespace DatabaseProvidersConstants {
-  export const USERS = 'USERS_PROVIDERS';
 }
 
 export namespace JwtConstants {

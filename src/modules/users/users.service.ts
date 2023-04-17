@@ -1,17 +1,15 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { DatabaseProvidersConstants } from 'src/constants';
-import { randomUUID } from 'crypto';
-import { UserDTO } from './dto/user.dto';
 import { GraphQLError } from 'graphql';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(DatabaseProvidersConstants.USERS)
+    @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
   ) {}
 
