@@ -23,7 +23,7 @@ export class UsersResolver {
   @UseGuards(JwtAuthGuard)
   findOne(@Args('id', { type: () => String }) id: string) {
     try {
-      return this.usersService.findOne(id);
+      return this.usersService.findOneById(id);
     } catch (err) {
       return err;
     }

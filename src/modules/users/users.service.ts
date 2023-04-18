@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { GraphQLError } from 'graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -15,6 +14,7 @@ export class UsersService {
 
   create(createUserInput: CreateUserInput): Promise<User> {
     const user = this.usersRepository.create({ ...createUserInput });
+
     return this.usersRepository.save(user);
   }
 
@@ -24,14 +24,16 @@ export class UsersService {
     });
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOneById(id: string): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: {
         id,
       },
     });
 
-    if (!user) return null;
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     return user;
   }
@@ -43,7 +45,9 @@ export class UsersService {
       },
     });
 
-    if (!user) return null;
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     return user;
   }
@@ -54,7 +58,9 @@ export class UsersService {
       ...updateUserInput,
     });
 
-    if (!user) throw new GraphQLError(`User id doesn't exist`);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     return this.usersRepository.save(user);
   }
@@ -66,7 +72,9 @@ export class UsersService {
       },
     });
 
-    if (!user) throw new GraphQLError(`User id doesn't exist`);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     return this.usersRepository.remove(user);
   }
