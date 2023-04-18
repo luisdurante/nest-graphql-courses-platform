@@ -8,9 +8,6 @@ import { NotFoundException } from '@nestjs/common';
 describe('UsersService', () => {
   let usersService: UsersService;
 
-  const invalidId = '0939e8b6-5542-43b5-9087-76d640c3c4f9';
-  const invalidEmail = 'fake@email.com';
-
   const mockUserRepository = {
     create: jest.fn(),
     save: jest.fn(),
@@ -53,7 +50,7 @@ describe('UsersService', () => {
       const users = await usersService.findAll();
 
       // Assert
-      expect(users).toHaveLength(UsersMock.users.length);
+      expect(users).toHaveLength(UsersMock.getUsersLength());
       expect(mockUserRepository.find).toHaveBeenCalledTimes(1);
     });
   });
@@ -77,9 +74,9 @@ describe('UsersService', () => {
       mockUserRepository.findOne.mockReturnValue(null);
 
       // Act, Assert
-      await expect(usersService.findOneById(invalidId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        usersService.findOneById(UsersMock.getInvalidId()),
+      ).rejects.toThrow(NotFoundException);
       expect(mockUserRepository.findOne).toHaveBeenCalledTimes(1);
     });
   });
@@ -103,9 +100,9 @@ describe('UsersService', () => {
       mockUserRepository.findOne.mockReturnValue(null);
 
       // Act, Assert
-      await expect(usersService.findOneByEmail(invalidEmail)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        usersService.findOneByEmail(UsersMock.getInvalidEmail()),
+      ).rejects.toThrow(NotFoundException);
       expect(mockUserRepository.findOne).toHaveBeenCalledTimes(1);
     });
   });
@@ -113,7 +110,7 @@ describe('UsersService', () => {
   describe('create', () => {
     it('should create and return an user', async () => {
       // Arrange
-      const mockUser = UsersMock.getUserInput();
+      const mockUser = UsersMock.getCreateUserInput();
       mockUserRepository.create.mockReturnValue(mockUser);
       mockUserRepository.save.mockReturnValue(UsersMock.getCreatedUser());
 
@@ -147,7 +144,10 @@ describe('UsersService', () => {
 
     it('should return NotFoundException when user does not exist', async () => {
       // Arrange
-      const updatedUserInput = { id: invalidId, name: 'Updated Name' };
+      const updatedUserInput = {
+        id: UsersMock.getInvalidId(),
+        name: 'Updated Name',
+      };
       mockUserRepository.preload.mockReturnValue(null);
 
       // Act, Assert
@@ -180,9 +180,9 @@ describe('UsersService', () => {
       mockUserRepository.findOne.mockReturnValue(null);
 
       // Act, Assert
-      await expect(usersService.remove(invalidId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        usersService.remove(UsersMock.getInvalidId()),
+      ).rejects.toThrow(NotFoundException);
       expect(mockUserRepository.findOne).toHaveBeenCalledTimes(1);
       expect(mockUserRepository.remove).toHaveBeenCalledTimes(0);
     });

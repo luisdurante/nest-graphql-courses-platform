@@ -1,11 +1,10 @@
-import { randomUUID } from 'crypto';
 import { CreateUserInput } from 'src/modules/users/dto/create-user.input';
 import { User } from 'src/modules/users/entities/user.entity';
 
 export class UsersMock {
-  static readonly users: User[] = [
+  private static readonly users: User[] = [
     {
-      id: randomUUID(),
+      id: '113fad8a-23bc-4e6f-92c2-1705acaec5b9',
       name: 'Fulano da Silva',
       description: null,
       email: 'fulano@email.com',
@@ -16,7 +15,7 @@ export class UsersMock {
       deletedAt: null,
     },
     {
-      id: randomUUID(),
+      id: '585b7c36-d635-4712-8476-28110b23e7c7',
       name: 'Ciclano da Silva',
       description: null,
       email: 'ciclano@email.com',
@@ -27,7 +26,7 @@ export class UsersMock {
       deletedAt: null,
     },
     {
-      id: randomUUID(),
+      id: '095b1db2-786c-4a8b-ab69-24f14705bf9c',
       name: 'Beltrano da Silva',
       description: 'Valid Description',
       email: 'beltrano@email.com',
@@ -39,6 +38,13 @@ export class UsersMock {
     },
   ];
 
+  private static readonly invalidEmail: string = 'fake@email.com';
+
+  private static readonly invalidId: string =
+    '0939e8b6-5542-43b5-9087-76d640c3c4f9';
+
+  private static readonly validAccessToken: string = 'valid.access_token.jwt';
+
   static getValidUsers(): User[] {
     return this.users;
   }
@@ -47,16 +53,44 @@ export class UsersMock {
     return this.users[0];
   }
 
-  static getUserInput(): CreateUserInput {
+  static getInvalidContext() {
     return {
-      email: 'fulano@email.com',
-      name: 'Fulano da Silva',
-      password: 'password',
-      birthDate: new Date(2000, 3, 14, 0, 0, 0),
+      req: { user: { id: this.invalidId } },
     };
+  }
+
+  static getValidContext() {
+    return {
+      req: { user: { id: this.users[0].id } },
+    };
+  }
+
+  static getCreateUserInput(): CreateUserInput {
+    return {
+      email: this.users[0].email,
+      name: this.users[0].name,
+      password: this.users[0].password,
+      birthDate: this.users[0].birthDate,
+    };
+  }
+
+  static getInvalidId() {
+    return this.invalidId;
+  }
+
+  static getInvalidEmail() {
+    return this.invalidEmail;
+  }
+
+  static getAccessToken() {
+    return this.validAccessToken;
   }
 
   static getCreatedUser(): User {
     return this.users[0];
+  }
+
+  static getUsersLength() {
+    return this.users.length;
   }
 }
