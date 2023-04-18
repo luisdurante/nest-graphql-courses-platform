@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { DateResolver, DateTimeResolver } from 'graphql-scalars';
 import { AuthModule } from './modules/auth/auth.module';
-import { PostgresConstants } from './constants';
+import { PostgresConstants } from './common/constants';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
