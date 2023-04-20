@@ -1,5 +1,5 @@
-import { CreateUserInput } from 'src/modules/users/dto/create-user.input';
-import { User } from 'src/modules/users/entities/user.entity';
+import { CreateUserInput } from '../../modules/users/dto/create-user.input';
+import { User } from '../../modules/users/entities/user.entity';
 
 export class UsersMock {
   private static readonly users: User[] = [
@@ -74,15 +74,24 @@ export class UsersMock {
     };
   }
 
-  static getInvalidId() {
+  static getFormattedCreateUserInput(): any {
+    return {
+      email: this.users[1].email,
+      name: this.users[1].name,
+      password: this.users[1].password,
+      birthDate: this.formatDate(this.users[1].birthDate),
+    };
+  }
+
+  static getInvalidId(): string {
     return this.invalidId;
   }
 
-  static getInvalidEmail() {
+  static getInvalidEmail(): string {
     return this.invalidEmail;
   }
 
-  static getAccessToken() {
+  static getAccessToken(): string {
     return this.validAccessToken;
   }
 
@@ -90,7 +99,11 @@ export class UsersMock {
     return this.users[0];
   }
 
-  static getUsersLength() {
+  static getUsersLength(): number {
     return this.users.length;
+  }
+
+  private static formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 }

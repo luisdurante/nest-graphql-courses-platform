@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../../modules/users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { UsersMock } from '../../common/mocks/users.mock';
+import { UsersMock } from '../../common/test/users-mocks';
 import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {

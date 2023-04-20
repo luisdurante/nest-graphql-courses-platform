@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
-import { UsersMock } from '../../common/mocks/users.mock';
+import { UsersMock } from '../../common/test/users-mocks';
 import { ForbiddenException } from '@nestjs/common';
-import { User } from './entities/user.entity';
 
 describe('UsersResolver', () => {
   let usersResolver: UsersResolver;

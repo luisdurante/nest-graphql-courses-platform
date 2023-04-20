@@ -4,8 +4,8 @@ import { LoginInput } from './dto/login.input';
 import { AuthService } from './auth.service';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
-import { UserDTO } from '../users/dto/user.dto';
-import { CreateUserInput } from '../users/dto/create-user.input';
+import { UserDTO } from '../../modules/users/dto/user.dto';
+import { CreateUserInput } from '../../modules/users/dto/create-user.input';
 
 @Resolver()
 export default class AuthResolver {
