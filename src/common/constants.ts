@@ -1,3 +1,5 @@
+import { User } from '../modules/users/entities/user.entity';
+
 export namespace PostgresConstants {
   export const TYPE = 'postgres';
   export const HOST = process.env.POSTGRES_HOST;
@@ -5,7 +7,7 @@ export namespace PostgresConstants {
   export const USERNAME = process.env.POSTGRES_USER;
   export const PASSWORD = process.env.POSTGRES_PASS;
   export const DATABASE = process.env.POSTGRES_DATABASE;
-  export const ENTITIES = [__dirname + '/../**/*.entity.js'];
+  export const ENTITIES = [User];
   export const SYNCHRONIZE = true;
 }
 
