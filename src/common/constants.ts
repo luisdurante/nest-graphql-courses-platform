@@ -1,4 +1,5 @@
 import { User } from '../modules/users/entities/user.entity';
+import { Course } from '../modules/courses/entities/course.entity';
 
 export namespace PostgresConstants {
   export const TYPE = 'postgres';
@@ -7,7 +8,7 @@ export namespace PostgresConstants {
   export const USERNAME = process.env.POSTGRES_USER;
   export const PASSWORD = process.env.POSTGRES_PASS;
   export const DATABASE = process.env.POSTGRES_DATABASE;
-  export const ENTITIES = [User];
+  export const ENTITIES = [User, Course];
   export const SYNCHRONIZE = true;
 }
 

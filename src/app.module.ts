@@ -8,6 +8,7 @@ import { DateResolver, DateTimeResolver } from 'graphql-scalars';
 import { AuthModule } from './modules/auth/auth.module';
 import { PostgresConstants } from './common/constants';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CoursesModule } from './modules/courses/courses.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     UsersModule,
     AuthModule,
+    CoursesModule,
   ],
   controllers: [],
   providers: [],
