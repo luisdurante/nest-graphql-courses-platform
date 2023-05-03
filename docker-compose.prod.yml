@@ -1,5 +1,4 @@
 version: "3"
-
 services:
   app_prod:
     build: 
@@ -12,12 +11,3 @@ services:
       - .:/home/node/app
       - /home/node/app/dist
       - /home/node/app/node_modules
-    depends_on:
-      - postgres_prod
-  postgres_prod:
-    image: "postgres:15"
-    container_name: course-platform-postgres-prod
-    environment:
-      - "POSTGRES_USER=${POSTGRES_USER}"
-      - "POSTGRES_PASSWORD=${POSTGRES_PASS}"
-      - "POSTGRES_DB=${POSTGRES_DATABASE}"
