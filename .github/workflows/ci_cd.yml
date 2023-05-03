@@ -21,9 +21,8 @@ env:
   SERVICE: nestjs-course-api
   REGION: us-central1
 
-
 jobs:
-  ci:
+  build:
     runs-on: ubuntu-latest
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
@@ -69,6 +68,24 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
+      - name: Build for testing
+        id: build-for-testing
+        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
+        with:
+          context: .
+          file: ./Dockerfile.prod
+          push: false
+          target: initial
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Enable containers
+        run: docker-compose -f docker-compose.prod.yml up -d
+
+      - name: Running unit tests
+        run: docker compose -f docker-compose.prod.yml exec -T app_prod sh -c "npm run test"
+
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
@@ -78,6 +95,7 @@ jobs:
           context: .
           file: ./Dockerfile.prod
           push: ${{ github.event_name != 'pull_request' }}
+          target: production
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -97,24 +115,32 @@ jobs:
         # against the sigstore community Fulcio instance.
         run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
   
-  cd:
-      needs: ci
+  deploy:
+      needs: build
       if: ${{ github.event_name != 'pull_request' }}
       runs-on: ubuntu-latest
 
       steps:
-
         - name: Checkout repository
           uses: actions/checkout@v3
       
         - id: 'auth'
-          uses: 'google-github-actions/auth@v0'
+          uses: 'google-github-actions/auth@v1'
           with:
             credentials_json: '${{ secrets.GCP_SA_KEY }}'
       
         - name: 'Deploy to Cloud Run'
-          uses: 'google-github-actions/deploy-cloudrun@v0'
+          uses: 'google-github-actions/deploy-cloudrun@v1'
           with:
             service: ${{ env.SERVICE }}
-            image: ${{ needs.ci.outputs.tags }}
+            image: ${{ needs.build.outputs.tags }}
             region: ${{ env.REGION }}
+            flags: '--add-cloudsql-instances=${{ secrets.DB_PROJECT_ID }}:${{ env.REGION }}:${{ secrets.DB_PROJECT_INSTANCE }} --port=3000 --max-instances=1 --min-instances=1 --vpc-connector=cloud-run-sql-vpc'
+            env_vars: |
+              POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
+              POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+              POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+              POSTGRES_PASS=${{ secrets.POSTGRES_PASS }}
+              POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE }}
+              JWT_SECRET=${{ secrets.JWT_SECRET }}
+              JWT_TTL=${{ secrets.JWT_TTL }}

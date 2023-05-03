@@ -11,3 +11,17 @@ services:
       - .:/home/node/app
       - /home/node/app/dist
       - /home/node/app/node_modules
+    depends_on:
+      - db_prod
+  db_prod:
+    image: "postgres"
+    container_name: course-platform-postgres-dev
+    environment:
+      - "POSTGRES_USER=testUser"
+      - "POSTGRES_PASSWORD=testPassword"
+      - "POSTGRES_DB=test-db"
+    restart: always
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
