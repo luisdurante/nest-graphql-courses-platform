@@ -1,0 +1,9 @@
+.docker/
+.git/
+
+dist/
+node_modules/
+coverage/
+
+docker-compose.yml
+Dockerfile.prod
