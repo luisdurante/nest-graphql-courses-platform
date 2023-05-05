@@ -28,6 +28,7 @@ import { CoursesModule } from './modules/courses/courses.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       playground: true,
+      csrfPrevention: false,
       resolvers: { Date: DateResolver, DateTime: DateTimeResolver },
     }),
     UsersModule,
